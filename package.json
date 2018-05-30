@@ -1,7 +1,7 @@
 {
-	"name": "mva",
+	"name": "momenta-dva",
 	"version": "0.1.0",
-	"description": "",
+	"description": "dva for momoenta",
 	"main": "libs/index.js",
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
