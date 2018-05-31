@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Loading = () => null
+let LoadingComponent = () => null
 
-function init(initializer) {
+function initialize(initializer) {
 	return target => {
 		return class extends React.PureComponent {
 			constructor(props) {
@@ -48,25 +48,29 @@ function init(initializer) {
 				if (initial) {
 					return React.createElement(target, { ...this.props, ...props })
 				} else {
-					return <Loading style={{ margin: 200 }} />
+					return <LoadingComponent style={{ margin: 200 }} />
 				}
 			}
 		}
 	}
 }
 
-export default init
+initialize.setDefaultLoadingComponent = component => {
+	LoadingComponent = component
+}
+
+export default initialize
 
 /**
  * 
  
- @init(props => {
+ @initialize(props => {
 	const { match } = props
 	return {
 		imei: match.params.imei,
 	}
 })
-@init(() => {
+@initialize(() => {
 	return new Promise(resolve => {
 		setTimeout(resolve, 2000)
 	})

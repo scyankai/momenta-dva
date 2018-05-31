@@ -2,7 +2,10 @@
 	"name": "momenta-dva",
 	"version": "0.1.0",
 	"description": "dva for momoenta",
-	"main": "libs/index.js",
+	"main": "index.js",
+	"dependencies": {
+		"dva": "^2.2.3"
+	},
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
 		"babel-plugin-transform-object-rest-spread": "^6.26.0",
@@ -14,7 +17,7 @@
 		"react": "*"
 	},
 	"scripts": {
-		"babel": "babel src --out-dir libs"
+		"babel": "babel src --out-dir lib"
 	},
 	"author": "yankai"
 }
