@@ -1,22 +1,13 @@
-import mva from "./mva";
-
-function modelNotExisted(model) {
-  const app = mva._get_global_dva_app();
-  return !app._models().some(({ namespace }) => {
-    return (
-      namespace ===
-      model.namespace.substring(model.namespace.lastIndexOf("/") + 1)
-    );
-  });
-}
+import mva from './mva'
 
 function attach(...models) {
-  models.filter(modelNotExisted).forEach(m => {
-    mva.model(m);
-  });
-  return target => {
-    return target;
-  };
+	return target => {
+		models.forEach(m => {
+			mva.model(m)
+		})
+
+		return target
+	}
 }
 
-export default attach;
+export default attach

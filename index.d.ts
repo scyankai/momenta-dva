@@ -1,144 +1,129 @@
-import {
-  Reducer,
-  Action,
-  ReducersMapObject,
-  Dispatch,
-  MiddlewareAPI,
-  StoreEnhancer
-} from "redux";
+import { Reducer, Action, ReducersMapObject, Dispatch, MiddlewareAPI, StoreEnhancer } from 'redux'
 
-import { History } from "history";
+import { History } from 'history'
 
 export interface onActionFunc {
-  (api: MiddlewareAPI<any>): void;
+	(api: MiddlewareAPI<any>): void
 }
 
 export interface ReducerEnhancer {
-  (reducer: Reducer<any>): void;
+	(reducer: Reducer<any>): void
 }
 
 export interface Hooks {
-  onError?: (e: Error, dispatch: Dispatch<any>) => void;
-  onAction?: onActionFunc | onActionFunc[];
-  onStateChange?: () => void;
-  onReducer?: ReducerEnhancer;
-  onEffect?: () => void;
-  onHmr?: () => void;
-  extraReducers?: ReducersMapObject;
-  extraEnhancers?: StoreEnhancer<any>[];
+	onError?: (e: Error, dispatch: Dispatch<any>) => void
+	onAction?: onActionFunc | onActionFunc[]
+	onStateChange?: () => void
+	onReducer?: ReducerEnhancer
+	onEffect?: () => void
+	onHmr?: () => void
+	extraReducers?: ReducersMapObject
+	extraEnhancers?: StoreEnhancer<any>[]
 }
 
 export type DvaOption = Hooks & {
-  initialState?: Object;
-  history?: Object;
-};
-
-export interface EffectsCommandMap {
-  put: <A extends Action>(action: A) => any;
-  call: Function;
-  select: Function;
-  take: Function;
-  cancel: Function;
-  [key: string]: any;
+	initialState?: Object
+	history?: Object
 }
 
-export type Effect = (action: Action, effects: EffectsCommandMap) => void;
-export type EffectType = "takeEvery" | "takeLatest" | "watcher" | "throttle";
-export type EffectWithType = [Effect, { type: EffectType }];
-export type Subscription = (api: SubscriptionAPI, done: Function) => void;
-export type ReducersMapObjectWithEnhancer = [
-  ReducersMapObject,
-  ReducerEnhancer
-];
+export interface EffectsCommandMap {
+	put: <A extends Action>(action: A) => any
+	call: Function
+	select: Function
+	take: Function
+	cancel: Function
+	[key: string]: any
+}
+
+export type Effect = (action: Action, effects: EffectsCommandMap) => void
+export type EffectType = 'takeEvery' | 'takeLatest' | 'watcher' | 'throttle'
+export type EffectWithType = [Effect, { type: EffectType }]
+export type Subscription = (api: SubscriptionAPI, done: Function) => void
+export type ReducersMapObjectWithEnhancer = [ReducersMapObject, ReducerEnhancer]
 
 export interface EffectsMapObject {
-  [key: string]: Effect | EffectWithType;
+	[key: string]: Effect | EffectWithType
 }
 
 export interface SubscriptionAPI {
-  history: History;
-  dispatch: Dispatch<any>;
+	history: History
+	dispatch: Dispatch<any>
 }
 
 export interface SubscriptionsMapObject {
-  [key: string]: Subscription;
+	[key: string]: Subscription
 }
 
 export interface Model {
-  namespace: string;
-  state?: any;
-  reducers?: ReducersMapObject | ReducersMapObjectWithEnhancer;
-  effects?: EffectsMapObject;
-  subscriptions?: SubscriptionsMapObject;
+	namespace: string
+	state?: any
+	reducers?: ReducersMapObject | ReducersMapObjectWithEnhancer
+	effects?: EffectsMapObject
+	subscriptions?: SubscriptionsMapObject
 }
 
 export interface RouterAPI {
-  history: History;
-  app: DvaInstance;
+	history: History
+	app: DvaInstance
 }
 
 export interface Router {
-  (api?: RouterAPI): JSX.Element | Object;
+	(api?: RouterAPI): JSX.Element | Object
 }
 
 export interface DvaInstance {
-  /**
-   * Register an object of hooks on the application.
-   *
-   * @param hooks
-   */
-  use: (hooks: Hooks) => void;
+	/**
+	 * Register an object of hooks on the application.
+	 *
+	 * @param hooks
+	 */
+	use: (hooks: Hooks) => void
 
-  /**
-   * Register a model.
-   *
-   * @param model
-   */
-  model: (model: Model) => void;
+	/**
+	 * Register a model.
+	 *
+	 * @param model
+	 */
+	model: (model: Model) => void
 
-  /**
-   * Unregister a model.
-   *
-   * @param namespace
-   */
-  unmodel: (namespace: string) => void;
+	/**
+	 * Unregister a model.
+	 *
+	 * @param namespace
+	 */
+	unmodel: (namespace: string) => void
 
-  /**
-   * Config router. Takes a function with arguments { history, dispatch },
-   * and expects router config. It use the same api as react-router,
-   * return jsx elements or JavaScript Object for dynamic routing.
-   *
-   * @param router
-   */
-  router: (router: Router) => void;
+	/**
+	 * Config router. Takes a function with arguments { history, dispatch },
+	 * and expects router config. It use the same api as react-router,
+	 * return jsx elements or JavaScript Object for dynamic routing.
+	 *
+	 * @param router
+	 */
+	router: (router: Router) => void
 
-  /**
-   * Start the application. Selector is optional. If no selector
-   * arguments, it will return a function that return JSX elements.
-   *
-   * @param selector
-   */
-  start: (selector?: HTMLElement | string) => any;
+	/**
+	 * Start the application. Selector is optional. If no selector
+	 * arguments, it will return a function that return JSX elements.
+	 *
+	 * @param selector
+	 */
+	start: (selector?: HTMLElement | string) => any
 }
 
-export default function dva(opts?: DvaOption): DvaInstance;
+export default function dva(opts?: DvaOption): DvaInstance
 
 /**
  * Connects a React component to Dva.
  */
-export function connect(
-  mapStateToProps?: Function,
-  mapDispatchToProps?: Function,
-  mergeProps?: Function,
-  options?: Object
-): Function;
+export function connect(mapStateToProps?: Function, mapDispatchToProps?: Function, mergeProps?: Function, options?: Object): Function
 
 /**
  * Initialize a React component
  */
-export function initialize(props?: Object): Function;
+export function initialize(props?: Object): Function
 
 /**
  * Attach models
  */
-export function attach(models: Object): Function;
+export function attach(models?: Object): Function

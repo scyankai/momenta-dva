@@ -1,1 +1,1 @@
-module.exports = require("dva/router");
+module.exports = require('dva/router')

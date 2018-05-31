@@ -1,1 +1,1 @@
-module.exports = require("dva/saga");
+module.exports = require('dva/saga')
