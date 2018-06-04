@@ -1,6 +1,6 @@
 import mva from './mva'
 
-function attach(...models) {
+function useModel(...models) {
 	return target => {
 		models.forEach(m => {
 			mva.model(m)
@@ -10,4 +10,4 @@ function attach(...models) {
 	}
 }
 
-export default attach
+export default useModel

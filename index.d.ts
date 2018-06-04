@@ -124,6 +124,6 @@ export function connect(mapStateToProps?: Function, mapDispatchToProps?: Functio
 export function initialize(props?: Object): Function
 
 /**
- * Attach models
+ * add models to mva
  */
-export function attach(models?: Object): Function
+export function useModel(models?: Object): Function
