@@ -1,1 +1,1 @@
-module.exports = require('dva/fetch')
+module.exports = require("dva/fetch");

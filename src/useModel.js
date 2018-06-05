@@ -1,13 +1,13 @@
-import mva from './mva'
+import mva from "./mva";
 
 function useModel(...models) {
-	return target => {
-		models.forEach(m => {
-			mva.model(m)
-		})
+  return target => {
+    models.forEach(m => {
+      mva.model(m);
+    });
 
-		return target
-	}
+    return target;
+  };
 }
 
-export default useModel
+export default useModel;

@@ -1,3 +1,3 @@
-import * as isomorphicFetch from 'isomorphic-fetch';
+import * as isomorphicFetch from "isomorphic-fetch";
 
 export = isomorphicFetch;

@@ -1,12 +1,12 @@
-const mva = require('./lib/mva')
-const dynamic = require('dva/dynamic').default
+const mva = require("./lib/mva");
+const dynamic = require("dva/dynamic").default;
 
 function mdynamic(opts) {
-	const app = mva._get_global_dva_app()
-	const newOpts = Object.assign(opts || {}, { app: app })
-	return dynamic(newOpts)
+  const app = mva._get_global_dva_app();
+  const newOpts = Object.assign(opts || {}, { app: app });
+  return dynamic(newOpts);
 }
 
-mdynamic.setDefaultLoadingComponent = dynamic.setDefaultLoadingComponent
+mdynamic.setDefaultLoadingComponent = dynamic.setDefaultLoadingComponent;
 
-module.exports = mdynamic
+module.exports = mdynamic;
