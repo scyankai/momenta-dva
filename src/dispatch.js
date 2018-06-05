@@ -1,7 +1,6 @@
-import mva from './mva'
-
-const app = mva._get_global_dva_app()
+import mva from "./mva";
 
 export default action => {
-	app._store.dispatch(action)
-}
+  const app = mva._get_global_dva_app();
+  app._store.dispatch(action);
+};
