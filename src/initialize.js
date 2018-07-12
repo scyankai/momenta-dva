@@ -1,81 +1,94 @@
-import React from "react";
+import React from 'react'
 
-let LoadingComponent = () => null;
+const config = {}
 
-function initialize(initializer) {
+let defaultLoadingComponent = () => null
+let onLoadingFailDefault = () => null
+
+const STATE = {
+  INITIALIZING: 1,
+  SUCCESS: 2,
+  FAIL: 3
+}
+
+function initializeComponent(key, initializer) {
+  const { loadingComponent = defaultLoadingComponent, onLoadingFail = onLoadingFailDefault } = config[key] || {}
   return target => {
     return class extends React.PureComponent {
       constructor(props) {
-        super(props);
+        super(props)
         this.state = {
-          initial: false,
+          initializationState: STATE.INITIALIZING,
           props: null
-        };
-        this.init = this.init.bind(this);
-        this.executeInitializer = this.executeInitializer.bind(this);
-        this.handleInitializerResult = this.handleInitializerResult.bind(this);
+        }
+        this.handleSuccess = this.handleSuccess.bind(this)
+        this.handleFail = this.handleFail.bind(this)
+        this.runInitializer = this.runInitializer.bind(this)
+        this.handleInitializerResult = this.handleInitializerResult.bind(this)
       }
 
       componentWillMount() {
-        this.executeInitializer();
+        this.runInitializer()
       }
 
-      init(props) {
-        this.setState({ initial: true, props });
+      handleSuccess(props) {
+        this.setState({ initializationState: STATE.SUCCESS, props })
       }
 
-      executeInitializer() {
-        if (typeof initializer === "function") {
-          const result = initializer(this.props);
-          this.handleInitializerResult(result);
+      handleFail(err) {
+        this.setState({ initializationState: STATE.FAIL })
+      }
+
+      runInitializer() {
+        if (typeof initializer === 'function') {
+          try {
+            const result = initializer(this.props)
+            this.handleInitializerResult(result)
+          } catch (err) {
+            this.handleFail(err)
+          }
         } else {
-          this.init();
+          this.handleSuccess()
         }
       }
 
       handleInitializerResult(result) {
-        if (result && typeof result.then === "function") {
-          result.then(this.handleInitializerResult);
-        } else if (typeof result === "object") {
-          this.init(result);
+        if (result && typeof result.then === 'function') {
+          result.then(this.handleInitializerResult, this.handleFail)
+        } else if (typeof result === 'object') {
+          this.handleSuccess(result)
         } else {
-          this.init();
+          this.handleSuccess()
         }
       }
 
       render() {
-        const { initial, props } = this.state;
-        if (initial) {
-          return React.createElement(target, { ...this.props, ...props });
+        const { initializationState, props } = this.state
+        if (initializationState === STATE.SUCCESS) {
+          return React.createElement(target, { ...this.props, ...props })
+        } else if (initializationState === STATE.INITIALIZING) {
+          return React.isValidElement(loadingComponent) ? loadingComponent : React.createElement(loadingComponent)
         } else {
-          return React.isValidElement(LoadingComponent)
-            ? LoadingComponent
-            : React.createElement(LoadingComponent);
+          return onLoadingFail()
         }
       }
-    };
-  };
+    }
+  }
 }
 
-initialize.setDefaultLoadingComponent = component => {
-  LoadingComponent = component;
-};
+const initialize = initializeComponent.bind(null, null)
 
-export default initialize;
+initialize.configureDefault = options => {
+  const { loadingComponent, onLoadingFail } = options
+  if (loadingComponent) defaultLoadingComponent = loadingComponent
+  if (onLoadingFail) onLoadingFailDefault = onLoadingFail
+}
 
-/**
- * 
- 
- @initialize(props => {
-	const { match } = props
-	return {
-		imei: match.params.imei,
-	}
-})
-@initialize(() => {
-	return new Promise(resolve => {
-		setTimeout(resolve, 2000)
-	})
-})
+initialize.configure = (key, options) => {
+  if (key == null || typeof key !== 'string') throw Error('key is invalid')
+  config[key] = options || {}
+}
 
-*/
+initialize.of = key => initializeComponent.bind(null, key)
+
+export default initialize
